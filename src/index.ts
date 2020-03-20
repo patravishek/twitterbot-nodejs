@@ -16,14 +16,13 @@ const twitterOptions: Twit.Params = {
     lang:"en"
 };
 
-
-
 setInterval(()=>{
     twitter.get('search/tweets', twitterOptions, (err: Error, data: any) => {
         if(!err){
             for(let i=0; i< data.statuses.length; i++){
                 let retweetId = data.statuses[i].id_str;
-                console.info(retweetId);
+                console.info(`Retweeting Id: ${retweetId}`);
+                //console.info('The retweeting id: '+retweetId);
                 twitter.post('statuses/retweet/'+retweetId,{},
                 (err: Error, data: any)=>{
                     if(!err){
