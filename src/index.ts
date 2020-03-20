@@ -1,22 +1,41 @@
-import { Twitter } from "ts-twitter";
+import Twit from 'twit';
+//Setting Up for environment variables
 require("dotenv").config();
 
-let twitter = new Twitter(
-  process.env.TWITTER_CONSUMER_KEY,
-  process.env.TWITTER_CONSUMER_SECRET,
-  process.env.TOKEN,
-  process.env.TOKEN_SECRET
-);
- 
-twitter.getUserTimeline({ screen_name: "gbico" })
-  .then(tweets => {
-    console.info(tweets);
+let twitter = new Twit({
+    consumer_key:         <string>process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret:      <string>process.env.TWITTER_CONSUMER_SECRET,
+    access_token:         <string>process.env.TOKEN,
+    access_token_secret:  <string>process.env.TOKEN_SECRET,
 });
  
-twitter.searchTweets({ q: "@gbico" })
-    .then(function (t) {
-    console.info(t);
-})
-    .catch(function (e) {
-    console.info(e);
-});
+const twitterOptions: Twit.Params = {
+    q: "#100DaysOfCode",
+    count: 4,
+    result_type: 'recent',
+    lang:"en"
+};
+
+
+
+setInterval(()=>{
+    twitter.get('search/tweets', twitterOptions, (err: Error, data: any) => {
+        if(!err){
+            for(let i=0; i< data.statuses.length; i++){
+                let retweetId = data.statuses[i].id_str;
+                console.info(retweetId);
+                twitter.post('statuses/retweet/'+retweetId,{},
+                (err: Error, data: any)=>{
+                    if(!err){
+                        console.info('Success!, the bot has successfully posted the data')
+                    }else{
+                        console.error('An error has occurred!',err);
+                    }
+                });
+            }
+        }else{
+            console.error(err);
+        }
+    });
+}, 1000*20);
+
