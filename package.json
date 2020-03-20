@@ -32,5 +32,9 @@
     "rimraf": "^3.0.2",
     "ts-node": "^8.7.0",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ts-twitter": "^0.1.7"
   }
 }
