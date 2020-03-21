@@ -10,8 +10,8 @@ let twitter = new Twit({
 });
  
 const twitterOptions: Twit.Params = {
-    q: "#100DaysOfCode",
-    count: 4,
+    q: "#100DaysOfCode #typescript #javascript",
+    count: 10,
     result_type: 'recent',
     lang:"en"
 };
@@ -21,8 +21,10 @@ setInterval(()=>{
         if(!err){
             for(let i=0; i< data.statuses.length; i++){
                 let retweetId = data.statuses[i].id_str;
-                console.info(`Retweeting Id: ${retweetId}`);
-                //console.info('The retweeting id: '+retweetId);
+                let tweetInfo = data.statuses[i].text;
+                
+                console.info(`Retweeting Id: ${retweetId} || Message: ${tweetInfo}`);
+                console.info('The retweeting id: '+retweetId);
                 twitter.post('statuses/retweet/'+retweetId,{},
                 (err: Error, data: any)=>{
                     if(!err){
