@@ -22,17 +22,20 @@ setInterval(()=>{
             for(let i=0; i< data.statuses.length; i++){
                 let retweetId = data.statuses[i].id_str;
                 let tweetInfo = data.statuses[i].text;
-                
-                console.info(`Retweeting Id: ${retweetId} || Message: ${tweetInfo}`);
-                console.info('The retweeting id: '+retweetId);
-                twitter.post('statuses/retweet/'+retweetId,{},
-                (err: Error, data: any)=>{
-                    if(!err){
-                        console.info('Success!, the bot has successfully posted the data')
-                    }else{
-                        console.error('An error has occurred!',err);
-                    }
-                });
+                let retweetCount = data.statuses[i].retweet_count;
+                let favoriteCount = data.statuses[i].favorite_count;
+                console.info(`Received tweet Id: ${retweetId} || Message: ${tweetInfo}`);
+                if((retweetCount>30) && (favoriteCount>10)){
+                    console.info(`Retweet Id: ${retweetId} || Message: ${tweetInfo}`);
+                    twitter.post('statuses/retweet/'+retweetId,{},
+                    (err: Error, data: any)=>{
+                        if(!err){
+                            console.info('Success!, the bot has successfully posted the data')
+                        }else{
+                            console.error('An error has occurred!',err);
+                        }
+                    });
+                }
             }
         }else{
             console.error(err);
