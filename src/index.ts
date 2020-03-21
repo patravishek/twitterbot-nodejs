@@ -11,7 +11,7 @@ let twitter = new Twit({
  
 const twitterOptions: Twit.Params = {
     q: "#100DaysOfCode #typescript #javascript",
-    count: 10,
+    count: 100,
     result_type: 'recent',
     lang:"en"
 };
