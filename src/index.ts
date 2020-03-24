@@ -25,7 +25,9 @@ setInterval(()=>{
                 let retweetCount = data.statuses[i].retweet_count;
                 let favoriteCount = data.statuses[i].favorite_count;
                 console.info(`Received tweet Id: ${retweetId} || Message: ${tweetInfo}`);
+                //Checking if the tweet has been retweeted ever
                 if((retweetCount>2) || (favoriteCount>1)){
+                    //Retweeting a tweet.
                     console.info(`Retweet Id: ${retweetId} || Message: ${tweetInfo}`);
                     twitter.post('statuses/retweet/'+retweetId,{},
                     (err: Error, data: any)=>{
@@ -35,7 +37,8 @@ setInterval(()=>{
                             console.error(`An error has occurred!, ${err}`);
                         }
                     });
-                }else{
+
+                    //Commeting on a tweet
                     console.info(`Commenting Id ${retweetId}`);
                     let commentInfo : Twit.Params = {
                         in_reply_to_status_id: data.statuses[i].id_str,
