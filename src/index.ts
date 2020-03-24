@@ -11,7 +11,7 @@ let twitter = new Twit({
  
 const twitterOptions: Twit.Params = {
     q: "#100DaysOfCode #typescript #javascript",
-    count: 100,
+    count: 10,
     result_type: 'recent',
     lang:"en"
 };
@@ -25,14 +25,28 @@ setInterval(()=>{
                 let retweetCount = data.statuses[i].retweet_count;
                 let favoriteCount = data.statuses[i].favorite_count;
                 console.info(`Received tweet Id: ${retweetId} || Message: ${tweetInfo}`);
-                if((retweetCount>30) && (favoriteCount>10)){
+                if((retweetCount>2) || (favoriteCount>1)){
                     console.info(`Retweet Id: ${retweetId} || Message: ${tweetInfo}`);
                     twitter.post('statuses/retweet/'+retweetId,{},
                     (err: Error, data: any)=>{
                         if(!err){
-                            console.info('Success!, the bot has successfully posted the data')
+                            console.info(`Successfully Reply Posted for the tweet id: ${retweetId}`);
                         }else{
-                            console.error('An error has occurred!',err);
+                            console.error(`An error has occurred!, ${err}`);
+                        }
+                    });
+                }else{
+                    console.info(`Commenting Id ${retweetId}`);
+                    let commentInfo : Twit.Params = {
+                        in_reply_to_status_id: data.statuses[i].id_str,
+                        status: `@${data.statuses[i].user.screen_name} Keep learning, For any queries feel free to DM me.`
+                    };
+
+                    twitter.post('statuses/update/', commentInfo, (err: Error, data: any) => {
+                        if(!err){
+                            console.info(`Successfully Reply Posted for the tweet id: ${retweetId}`);
+                        }else{
+                            console.error(`An error has occurred!, ${err}`);
                         }
                     });
                 }
